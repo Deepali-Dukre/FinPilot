@@ -30,19 +30,28 @@ const issueSession = async (res, user) => {
   res.cookie('refreshToken', refreshToken, refreshCookieOptions);
 };
 
+const EMAIL_REGEX = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+
 const register = catchAsync(async (req, res, next) => {
   const { name, email, password } = req.body;
-  if (!name || !email || !password) {
+  if (!name?.trim() || !email?.trim() || !password) {
     return next(new AppError('Name, email and password are required', 400));
   }
+  if (!EMAIL_REGEX.test(email.trim())) {
+    return next(new AppError('Please provide a valid email address', 400));
+  }
+  if (password.length < 6) {
+    return next(new AppError('Password must be at least 6 characters', 400));
+  }
 
-  const existing = await User.findOne({ email: email.toLowerCase() });
+  const normalizedEmail = email.trim().toLowerCase();
+  const existing = await User.findOne({ email: normalizedEmail });
   if (existing) return next(new AppError('Email is already registered', 409));
 
   const isFirstUser = (await User.countDocuments()) === 0;
   const user = await User.create({
-    name,
-    email,
+    name: name.trim(),
+    email: normalizedEmail,
     password,
     role: isFirstUser ? 'admin' : 'user',
   });

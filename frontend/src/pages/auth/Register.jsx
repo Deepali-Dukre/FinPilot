@@ -16,16 +16,24 @@ export default function Register() {
   const {
     register,
     handleSubmit,
+    setError,
     formState: { errors, isSubmitting },
   } = useForm();
 
   const onSubmit = async (values) => {
     setServerError('');
     try {
-      await registerUser(values);
+      await registerUser({ ...values, name: values.name.trim(), email: values.email.trim() });
       navigate('/dashboard');
     } catch (err) {
-      setServerError(err.response?.data?.message || 'Registration failed');
+      const status = err.response?.status;
+      const message = err.response?.data?.message || 'Registration failed';
+
+      if (status === 409) {
+        setError('email', { type: 'manual', message });
+      } else {
+        setServerError(message);
+      }
     }
   };
 
@@ -41,14 +49,24 @@ export default function Register() {
           label="Name"
           icon={<UserIcon />}
           error={errors.name?.message}
-          {...register('name', { required: 'Name is required' })}
+          {...register('name', {
+            required: 'Name is required',
+            minLength: { value: 2, message: 'Name must be at least 2 characters' },
+            validate: (value) => value.trim().length > 0 || 'Name is required',
+          })}
         />
         <Input
           label="Email"
           type="email"
           icon={<MailIcon />}
           error={errors.email?.message}
-          {...register('email', { required: 'Email is required' })}
+          {...register('email', {
+            required: 'Email is required',
+            pattern: {
+              value: /^[^\s@]+@[^\s@]+\.[^\s@]+$/,
+              message: 'Enter a valid email address',
+            },
+          })}
         />
         <PasswordInput
           label="Password"
