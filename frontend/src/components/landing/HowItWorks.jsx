@@ -1,25 +1,50 @@
 const STEPS = [
-  { step: '01', title: 'Create your account', description: 'Sign up in seconds — no credit card required.' },
-  { step: '02', title: 'Add your transactions', description: 'Log income and expenses, or set up your categories.' },
-  { step: '03', title: 'Track and grow', description: 'Watch your dashboard, budgets and goals update in real time.' },
+  {
+    step: '01',
+    title: 'Create your account',
+    description: 'Sign up in seconds — no credit card, no bank linking required to start.',
+  },
+  {
+    step: '02',
+    title: 'Add your transactions',
+    description: 'Log income and expenses as they happen, or import a month in one go.',
+  },
+  {
+    step: '03',
+    title: 'Track and adjust',
+    description: 'Watch budgets and goals update live, and course-correct before the month ends.',
+  },
 ];
 
 export default function HowItWorks() {
   return (
-    <section id="how-it-works" className="bg-gray-50 py-20">
+    <section id="how-it-works" className="border-y-2 border-ink bg-paper py-24">
       <div className="mx-auto max-w-6xl px-6">
-        <div className="mx-auto max-w-2xl text-center">
-          <h2 className="text-3xl font-bold text-gray-900">Get started in three steps</h2>
+        <div className="flex flex-col items-start justify-between gap-4 sm:flex-row sm:items-end">
+          <div>
+            <p className="text-xs font-bold uppercase tracking-widest text-brand">The route</p>
+            <h2 className="font-display mt-3 text-4xl font-semibold text-ink">Three steps, then it runs itself</h2>
+          </div>
         </div>
 
-        <div className="mt-14 grid gap-8 sm:grid-cols-3">
-          {STEPS.map(({ step, title, description }) => (
-            <div key={step} className="text-center">
-              <div className="mx-auto flex h-12 w-12 items-center justify-center rounded-full bg-violet-600 text-sm font-bold text-white">
+        <div className="relative mt-16 grid gap-10 sm:grid-cols-3">
+          <svg
+            className="pointer-events-none absolute left-0 top-6 hidden w-full text-ink/15 sm:block"
+            height="2"
+            viewBox="0 0 100 2"
+            preserveAspectRatio="none"
+            aria-hidden="true"
+          >
+            <line x1="0" y1="1" x2="100" y2="1" stroke="currentColor" strokeWidth="2" strokeDasharray="0.5 4" />
+          </svg>
+
+          {STEPS.map(({ step, title, description }, i) => (
+            <div key={step} className={i % 2 === 1 ? 'sm:mt-10' : ''}>
+              <div className="font-display relative z-10 flex h-12 w-12 items-center justify-center rounded-full border-2 border-ink bg-brand text-sm font-bold text-paper">
                 {step}
               </div>
-              <h3 className="mt-4 font-semibold text-gray-900">{title}</h3>
-              <p className="mt-2 text-sm text-gray-500">{description}</p>
+              <h3 className="mt-5 text-xl font-semibold text-ink">{title}</h3>
+              <p className="mt-2 text-sm leading-relaxed text-ink-soft">{description}</p>
             </div>
           ))}
         </div>
