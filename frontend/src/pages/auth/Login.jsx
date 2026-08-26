@@ -2,11 +2,10 @@ import { useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { Link, useNavigate } from 'react-router-dom';
 import { useAuth } from '../../hooks/useAuth';
-import Input from '../../components/ui/Input';
-import PasswordInput from '../../components/ui/PasswordInput';
-import Button from '../../components/ui/Button';
-import AuthTabs from '../../components/ui/AuthTabs';
-import AuthLayout from '../../layouts/AuthLayout';
+import AuthField from '../../components/auth/AuthField';
+import AuthPasswordField from '../../components/auth/AuthPasswordField';
+import AuthButton from '../../components/auth/AuthButton';
+import AuthFrame from '../../components/auth/AuthFrame';
 import { MailIcon } from '../../components/ui/icons';
 
 export default function Login() {
@@ -30,36 +29,34 @@ export default function Login() {
   };
 
   return (
-    <AuthLayout>
-      <AuthTabs active="login" />
-
-      <h2 className="mb-1 text-xl font-semibold text-gray-900">Welcome back</h2>
-      <p className="mb-6 text-sm text-gray-500">Log in to your account</p>
+    <AuthFrame mode="login">
+      <h2 className="font-display mt-6 text-2xl font-semibold text-ink">Welcome back</h2>
+      <p className="mb-6 mt-1 text-sm text-ink-soft">Log in to keep your budget on course.</p>
 
       <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
-        <Input
+        <AuthField
           label="Email"
           type="email"
           icon={<MailIcon />}
           error={errors.email?.message}
           {...register('email', { required: 'Email is required' })}
         />
-        <PasswordInput
+        <AuthPasswordField
           label="Password"
           error={errors.password?.message}
           {...register('password', { required: 'Password is required' })}
         />
-        {serverError && <p className="text-sm text-red-500">{serverError}</p>}
-        <Button type="submit" className="w-full py-2.5" disabled={isSubmitting}>
+        {serverError && <p className="text-sm font-medium text-red-600">{serverError}</p>}
+        <AuthButton type="submit" disabled={isSubmitting}>
           {isSubmitting ? 'Logging in...' : 'Log in'}
-        </Button>
+        </AuthButton>
       </form>
 
-      <p className="mt-5 text-center text-sm">
-        <Link to="/forgot-password" className="text-violet-600 hover:underline">
+      <p className="mt-5 text-center text-sm text-ink-soft">
+        <Link to="/forgot-password" className="font-semibold text-brand hover:underline">
           Forgot password?
         </Link>
       </p>
-    </AuthLayout>
+    </AuthFrame>
   );
 }

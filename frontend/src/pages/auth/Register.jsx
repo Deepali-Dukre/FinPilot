@@ -2,11 +2,10 @@ import { useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { useNavigate } from 'react-router-dom';
 import { useAuth } from '../../hooks/useAuth';
-import Input from '../../components/ui/Input';
-import PasswordInput from '../../components/ui/PasswordInput';
-import Button from '../../components/ui/Button';
-import AuthTabs from '../../components/ui/AuthTabs';
-import AuthLayout from '../../layouts/AuthLayout';
+import AuthField from '../../components/auth/AuthField';
+import AuthPasswordField from '../../components/auth/AuthPasswordField';
+import AuthButton from '../../components/auth/AuthButton';
+import AuthFrame from '../../components/auth/AuthFrame';
 import { MailIcon, UserIcon } from '../../components/ui/icons';
 
 export default function Register() {
@@ -38,14 +37,12 @@ export default function Register() {
   };
 
   return (
-    <AuthLayout>
-      <AuthTabs active="register" />
-
-      <h2 className="mb-1 text-xl font-semibold text-gray-900">Create your account</h2>
-      <p className="mb-6 text-sm text-gray-500">Start tracking your finances in minutes</p>
+    <AuthFrame mode="register">
+      <h2 className="font-display mt-6 text-2xl font-semibold text-ink">Create your account</h2>
+      <p className="mb-6 mt-1 text-sm text-ink-soft">Start tracking your finances in minutes.</p>
 
       <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
-        <Input
+        <AuthField
           label="Name"
           icon={<UserIcon />}
           error={errors.name?.message}
@@ -55,7 +52,7 @@ export default function Register() {
             validate: (value) => value.trim().length > 0 || 'Name is required',
           })}
         />
-        <Input
+        <AuthField
           label="Email"
           type="email"
           icon={<MailIcon />}
@@ -68,7 +65,7 @@ export default function Register() {
             },
           })}
         />
-        <PasswordInput
+        <AuthPasswordField
           label="Password"
           error={errors.password?.message}
           {...register('password', {
@@ -76,11 +73,11 @@ export default function Register() {
             minLength: { value: 6, message: 'Minimum 6 characters' },
           })}
         />
-        {serverError && <p className="text-sm text-red-500">{serverError}</p>}
-        <Button type="submit" className="w-full py-2.5" disabled={isSubmitting}>
+        {serverError && <p className="text-sm font-medium text-red-600">{serverError}</p>}
+        <AuthButton type="submit" disabled={isSubmitting}>
           {isSubmitting ? 'Creating account...' : 'Create account'}
-        </Button>
+        </AuthButton>
       </form>
-    </AuthLayout>
+    </AuthFrame>
   );
 }
