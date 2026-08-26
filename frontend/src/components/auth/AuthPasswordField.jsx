@@ -18,7 +18,7 @@ const AuthPasswordField = forwardRef(function AuthPasswordField(props, ref) {
           className="pointer-events-auto transition hover:text-ink"
           aria-label={visible ? 'Hide password' : 'Show password'}
         >
-          {visible ? <EyeOffIcon /> : <EyeIcon />}
+          {visible ? <EyeIcon /> : <EyeOffIcon />}
         </button>
       }
       {...props}
